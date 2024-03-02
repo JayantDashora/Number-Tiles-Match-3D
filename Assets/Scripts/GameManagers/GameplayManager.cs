@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
+    public int m_targetBlockNumber;
     // Level complete function
 
     public void LevelComplete(){

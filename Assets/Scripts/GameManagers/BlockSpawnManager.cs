@@ -18,7 +18,7 @@ public class BlockSpawnManager : MonoBehaviour
     [SerializeField] private Section[] m_level;
     [SerializeField] private Grid m_mainStageGrid;
     [SerializeField] private LayerMask m_blockLayerMask; // Layer mask for blocks
-    [SerializeField] private GameplayManager gameplayManager;
+    [SerializeField] private GameplayManager m_gameplayManager;
     private int m_currentSectionIndex = 0;
 
     private void Start()
@@ -34,7 +34,7 @@ public class BlockSpawnManager : MonoBehaviour
         // Check whether is level is complete or not
 
         if(m_currentSectionIndex >= m_level.Length){
-            gameplayManager.LevelComplete();
+            m_gameplayManager.LevelComplete();
             return;
         }
 
@@ -67,9 +67,9 @@ public class BlockSpawnManager : MonoBehaviour
     }
 
     // Check if a cell is occupied by any object on the specified layer
-    private bool IsOccupied(Vector3Int cellPosition)
+    private bool IsOccupied(Vector3Int _cellPosition)
     {
-        Vector3 worldPosition = m_mainStageGrid.CellToWorld(cellPosition);
+        Vector3 worldPosition = m_mainStageGrid.CellToWorld(_cellPosition);
 
         // Cast a ray downwards to check for any objects on the specified layer
         RaycastHit hit;

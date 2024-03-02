@@ -16,16 +16,16 @@ public class NumberBlocksManipulator : MonoBehaviour
     }
 
     // Moves block to the bucket
-    private void MoveBlockToBucket(GameObject obj)
+    private void MoveBlockToBucket(GameObject _obj)
     {
 
         // Adds block to the bucket array
-        m_bucket.AddBlockToBucket(obj);
+        m_bucket.AddBlockToBucket(_obj);
 
 
         // Tweens block from intial position to the bucket top position
-        Vector3 destination = m_bucketGrid.CellToWorld(new Vector3Int(m_bucket.m_bucketTop,1,0));
-        obj.transform.position = destination;
+        Vector3 destination = m_bucketGrid.CellToWorld(new Vector3Int(m_bucket.m_bucketTop-1,0,0));
+        _obj.transform.parent.transform.position = destination;
 
 
 
