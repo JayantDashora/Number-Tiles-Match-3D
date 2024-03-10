@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d245c479610f86c46bd5a438837885d5, type: 3}
+  m_Name: SO_BlocksData
+  m_EditorClassIdentifier: 
+  m_blockColors:
+  - serializedVersion: 2
+    rgba: 9689341
+  - serializedVersion: 2
+    rgba: 9424367
+  - serializedVersion: 2
+    rgba: 9159393
+  - serializedVersion: 2
+    rgba: 8894419
+  - serializedVersion: 2
+    rgba: 8629444
+  - serializedVersion: 2
+    rgba: 8430519
+  - serializedVersion: 2
+    rgba: 8165544
+  - serializedVersion: 2
+    rgba: 7966619
+  - serializedVersion: 2
+    rgba: 7768209
+  - serializedVersion: 2
+    rgba: 7569285
+  - serializedVersion: 2
+    rgba: 7436411
+  - serializedVersion: 2
+    rgba: 7171437
