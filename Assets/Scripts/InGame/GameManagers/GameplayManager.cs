@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Voodoo.Utils;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -12,8 +13,9 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private GameObject m_loseGameScreen;
 
     private void Start() {
+        GameplayManager.m_levelComplete = false;  
+        PlayerPrefs.SetInt("CurrentLevel",SceneManager.GetActiveScene().buildIndex);
     }
-
     // Level complete function
 
     public void LevelComplete()

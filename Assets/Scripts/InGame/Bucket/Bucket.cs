@@ -5,29 +5,49 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class Bucket : MonoBehaviour
 {
     [SerializeField] private Grid m_bucketGrid;
     [SerializeField] private GameplayManager gameplayManager;
     [HideInInspector] public int m_bucketTop = 0;
-    [HideInInspector] public int m_bucketCapacity = 7; // Here 6 is the index till which we can go (as indexing starts from 0 in arrays)
-    [SerializeField] private GameObject[] m_bucketBlocks = new GameObject[7]; // Here 7 is the length of the array or the capacity of the bucket
+    public int m_bucketCapacity = 4; // Here 6 is the index till which we can go (as indexing starts from 0 in arrays)
+    private GameObject[] m_bucketBlocks = new GameObject[5]; // Here 7 is the length of the array or the capacity of the bucket
     //[SerializeField] private GameObject[] m_blocks;
     [SerializeField] private BlocksDataSO m_blocksData;
     private bool m_levelComplete = false;
     private bool m_isDoubling = false;
+    public bool m_canSelectBlocks = true;
+    public static event Action m_canSelectBlock;
+    public static event Action m_cannotSelectBlock;
 
     // Start 
 
     private void Start() {
-        for(int i = 0; i < 7; i++){
+
+
+        if(SceneManager.GetActiveScene().buildIndex > 21){
+            m_bucketCapacity = 3;
+            Array.Resize<GameObject>(ref m_bucketBlocks,4);
+            for(int i = 0; i < 4; i++){
+                m_bucketBlocks[i] = null;
+            }
+            return;
+        }
+
+        for(int i = 0; i < 5; i++){
             m_bucketBlocks[i] = null;
         }
+
     }
 
     // Update function
     private void Update() {
+
+        Debug.Log(m_bucketCapacity + "   " + m_bucketTop);
 
         if(!m_levelComplete){
             
@@ -55,7 +75,9 @@ public class Bucket : MonoBehaviour
             if(!SearchForDuplicates(_block)){
                 m_bucketBlocks[m_bucketTop] = _block;
                 m_bucketTop++;
-                _block.transform.parent.transform.DOJump(m_bucketGrid.CellToWorld(new Vector3Int(m_bucketTop-1,0,0)),1,1,1f).SetEase(Ease.OutSine);
+                //m_canSelectBlocks = false;
+                CannotSelectBlocksNow();
+                _block.transform.parent.transform.DOJump(m_bucketGrid.CellToWorld(new Vector3Int(m_bucketTop-1,0,0)),1,1,1f).SetEase(Ease.OutSine).onComplete = CanSelectBlocksNow;
                 _block.transform.parent.transform.DOShakeRotation(0.8f,20,5,60,true,ShakeRandomnessMode.Harmonic).SetEase(Ease.OutSine);
             }
 
@@ -63,10 +85,28 @@ public class Bucket : MonoBehaviour
 
         }
         else{
-            Invoke("GameOver",0.3f);
+            GameOver();
         }
 
     }
+
+    private void CannotSelectBlocksNow()
+    {
+        m_canSelectBlocks = false;
+        m_cannotSelectBlock?.Invoke();
+    }
+
+    private void CanSelectBlocksNow()
+    {
+        m_canSelectBlocks = true;
+        m_canSelectBlock?.Invoke();
+    }
+
+    private void CanSelectBlocksNowTimed()
+    {
+        Invoke("CanSelectBlocksNow", 1.2f);
+    }
+
 
     private void GameOver(){
         gameplayManager.GameOver();
@@ -89,7 +129,8 @@ public class Bucket : MonoBehaviour
             {
                 // Double the existing block
                 //Destroy(_newBlock.transform.parent.gameObject);
-                _newBlock.transform.DOJump(block.transform.position,1,1,1f).SetEase(Ease.OutSine);
+                CannotSelectBlocksNow();
+                _newBlock.transform.DOJump(block.transform.position,1,1,1f).SetEase(Ease.OutSine).onComplete = CanSelectBlocksNowTimed;
                 StartCoroutine(RemoveBlock(_newBlock,1.2f));
                 StartCoroutine(DoubleTheBlock(block,blockNumber, i));
                 foundDuplicate = true;
@@ -118,8 +159,10 @@ public class Bucket : MonoBehaviour
 
                 if (number == otherNumber)
                 {
-                    // Double both blocks                   
-                    otherBlock.transform.DOJump(block.transform.position, 0.3f, 1, 0.4f).SetEase(Ease.OutSine);
+                    // Double both blocks            
+                    //m_canSelectBlocks = false;
+                    CannotSelectBlocksNow();      
+                    otherBlock.transform.DOJump(block.transform.position, 0.3f, 1, 0.4f).SetEase(Ease.OutSine).onComplete = CanSelectBlocksNowTimed;
                     StartCoroutine(DoubleAndRemoveBlocks(block, otherBlock, number, i, j));
                 }
             }
@@ -128,7 +171,7 @@ public class Bucket : MonoBehaviour
 
     private IEnumerator DoubleAndRemoveBlocks(GameObject block, GameObject otherBlock, int number, int index1, int index2)
     {
-        yield return new WaitForSeconds(0.2f); // Adjust delay as needed
+        yield return new WaitForSeconds(0.05f); // Adjust delay as needed
         StartCoroutine(DoubleTheBlock(block, number, index1));
         StartCoroutine(RemoveBlock(otherBlock, 0.4f)); // No delay for immediate removal
     }
@@ -154,8 +197,7 @@ public class Bucket : MonoBehaviour
         m_bucketBlocks[_arrayPos] = newBlock.transform.GetChild(0).gameObject;
         */
         m_isDoubling = true;
-        yield return new WaitForSeconds(1f);
-        m_isDoubling = false;
+
 
 
         _block.tag = "NumberBlockBucket";
@@ -164,6 +206,10 @@ public class Bucket : MonoBehaviour
         _block.layer = LayerMask.NameToLayer("Default");
 
         _block.GetComponent<CubeNumber>().number = (2 * _blockNumber);
+
+        yield return new WaitForSeconds(1f);
+        m_isDoubling = false;
+
         _block.transform.GetChild(0).GetComponent<TextMeshPro>().text = (2 * _blockNumber).ToString();
         _block.GetComponent<Renderer>().material.color = m_blocksData.m_blockColors[(int)(Mathf.Log((float) _blockNumber, 2.0f))];
 
@@ -187,9 +233,12 @@ public class Bucket : MonoBehaviour
                     // Move the block in the scene
                     Vector3 newPosition = m_bucketGrid.CellToWorld(new Vector3Int(newIndex, 0, 0));
                     //m_bucketBlocks[i].transform.parent.position = newPosition;
-                    m_bucketBlocks[i].transform.parent.transform.DOJump(newPosition,0.5f,1,0.5f);
-
+                    //m_canSelectBlocks = false;
+                    CannotSelectBlocksNow();
+                    m_bucketBlocks[i].transform.parent.transform.DOJump(newPosition,0.5f,1,0.5f).onComplete = CanSelectBlocksNowTimed;
                     m_bucketBlocks[i] = null;
+                    
+
                 }
                 newIndex++;
             }
@@ -230,4 +279,4 @@ public class Bucket : MonoBehaviour
             Destroy(_newBlock.transform.parent.gameObject);
     }
 
-}
+} 

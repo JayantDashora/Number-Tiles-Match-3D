@@ -219,6 +219,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_blocksData: {fileID: 11400000, guid: 3f5bb29adc07d6243a4347160dd226af, type: 2}
+  m_number: 0
+  m_color: {r: 0, g: 0, b: 0, a: 0}
+  m_material: {fileID: 2100000, guid: bf3ea165505cae3458b5af267cb8a604, type: 2}
+  m_transparent: {fileID: 2100000, guid: fcb1f15dd214528439dccfdb6d99dd41, type: 2}
 --- !u!1 &4449757006115321652
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BucketGrid : MonoBehaviour
 {
@@ -7,11 +8,21 @@ public class BucketGrid : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 7; i++)
-        {
+        if(SceneManager.GetActiveScene().buildIndex > 21){
+            for (int i = 0; i < 4; i++){
             Vector3Int cellPosition = new Vector3Int(i, 0, 0);
             Vector3 worldPosition = m_grid.CellToWorld(cellPosition) + new Vector3(0.5f, 0.1f, 0.5f);
             GameObject indicator = Instantiate(m_indicatorPrefab, worldPosition, Quaternion.Euler(0, 0, 0));
+            }
         }
+        else{
+            for (int i = 0; i < 5; i++)
+            {
+                Vector3Int cellPosition = new Vector3Int(i, 0, 0);
+                Vector3 worldPosition = m_grid.CellToWorld(cellPosition) + new Vector3(0.5f, 0.1f, 0.5f);
+                GameObject indicator = Instantiate(m_indicatorPrefab, worldPosition, Quaternion.Euler(0, 0, 0));
+            }
+        }
+
     }
 }

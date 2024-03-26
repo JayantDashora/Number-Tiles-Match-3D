@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
+
+
 public class BlockSpawnManager : MonoBehaviour
 {
     // Creating the data structure for the level using array of arrays
@@ -24,6 +26,7 @@ public class BlockSpawnManager : MonoBehaviour
     [SerializeField] private GameplayManager m_gameplayManager;
     private int m_currentSectionIndex = 0;
 
+
     private void Start()
     {
         NumberBlocksManipulator.s_OnBoardEmpty += SpawnSection;
@@ -37,7 +40,6 @@ public class BlockSpawnManager : MonoBehaviour
         // Check whether is level is complete or not
 
         if(m_currentSectionIndex >= m_level.Length){
-            m_gameplayManager.LevelComplete();
             return;
         }
 
@@ -61,6 +63,7 @@ public class BlockSpawnManager : MonoBehaviour
                 {
                     
                     // Spawn the block on an empty spot
+
                     GameObject numberBlock = Instantiate(m_numberBlock, m_mainStageGrid.CellToWorld(spawnPoint), Quaternion.identity);
                     numberBlock.gameObject.transform.GetChild(0).GetComponent<CubeNumber>().number = currentSection[i];
                     numberBlock.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshPro>().text = currentSection[i].ToString();
