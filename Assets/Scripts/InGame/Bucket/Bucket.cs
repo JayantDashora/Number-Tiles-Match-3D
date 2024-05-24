@@ -29,7 +29,7 @@ public class Bucket : MonoBehaviour
     private void Start() {
 
 
-        if(SceneManager.GetActiveScene().buildIndex > 21){
+        if(SceneManager.GetActiveScene().buildIndex > 22){
             m_bucketCapacity = 3;
             Array.Resize<GameObject>(ref m_bucketBlocks,4);
             for(int i = 0; i < 4; i++){
@@ -90,13 +90,13 @@ public class Bucket : MonoBehaviour
 
     }
 
-    private void CannotSelectBlocksNow()
+    public void CannotSelectBlocksNow()
     {
         m_canSelectBlocks = false;
         m_cannotSelectBlock?.Invoke();
     }
 
-    private void CanSelectBlocksNow()
+    public void CanSelectBlocksNow()
     {
         m_canSelectBlocks = true;
         m_canSelectBlock?.Invoke();

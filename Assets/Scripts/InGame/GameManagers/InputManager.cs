@@ -10,14 +10,17 @@ public class InputManager : MonoBehaviour,ITapController
     [SerializeField] private NumberBlocksManipulator numberBlocksManipulator;
     [SerializeField] private Bucket m_bucket;
     private GameObject[] m_numberBlocks;
+    private bool canTap = true;
 
 
 
 
     public void OnTap(Vector3 _Pos)
     {
-        if(GameplayManager.m_levelComplete || !m_bucket.m_canSelectBlocks)
+        if (GameplayManager.m_levelComplete || !m_bucket.m_canSelectBlocks || !canTap)
             return;
+        
+        StartCoroutine(TapCooldown());
 
         // Cast a ray from the tapped position
         Ray ray = Camera.main.ScreenPointToRay(_Pos);
@@ -36,5 +39,13 @@ public class InputManager : MonoBehaviour,ITapController
         }
     }
 
+    private IEnumerator TapCooldown()
+    {
+        canTap = false;
+        yield return new WaitForSeconds(1.55f); // Adjust cooldown time here
+        canTap = true;
 
+    }
 }
+
+

@@ -8,7 +8,7 @@ public class BucketGrid : MonoBehaviour
 
     private void Start()
     {
-        if(SceneManager.GetActiveScene().buildIndex > 21){
+        if(SceneManager.GetActiveScene().buildIndex > 22){
             for (int i = 0; i < 4; i++){
             Vector3Int cellPosition = new Vector3Int(i, 0, 0);
             Vector3 worldPosition = m_grid.CellToWorld(cellPosition) + new Vector3(0.5f, 0.1f, 0.5f);

@@ -3067,6 +3067,7 @@ MonoBehaviour:
   - m_sectionBlocks: 2000000020000000
   - m_sectionBlocks: 80000000
   m_mainStageGrid: {fileID: 1366385103}
+  m_mainStageGridExtra: {fileID: 0}
   m_blockLayerMask:
     serializedVersion: 2
     m_Bits: 64

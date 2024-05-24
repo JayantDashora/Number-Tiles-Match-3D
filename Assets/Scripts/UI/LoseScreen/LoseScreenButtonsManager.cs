@@ -18,7 +18,7 @@ public class LoseScreenButtonsManager : MonoBehaviour
     private IEnumerator LoadHome(){
         yield return new WaitForSecondsRealtime(2f);
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
 

@@ -8,7 +8,7 @@ public class LevelTextUI : MonoBehaviour
 {
     [SerializeField] private TextMeshPro m_text;
     void Start(){
-        m_text.text = "LEVEL " + SceneManager.GetActiveScene().buildIndex.ToString();
+        m_text.text = "LEVEL " + (SceneManager.GetActiveScene().buildIndex-1).ToString();
     }
 
 }

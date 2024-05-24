@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/VoodooPackages/TinySauce/Preload/Scene/TSPreloadScene.unity
+    guid: bd3e77c0fce3d499b809746835c3d75d
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 1df9b3326f6bd6740a3ba50db3faf1ad
   - enabled: 1

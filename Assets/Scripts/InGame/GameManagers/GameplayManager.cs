@@ -15,11 +15,17 @@ public class GameplayManager : MonoBehaviour
     private void Start() {
         GameplayManager.m_levelComplete = false;  
         PlayerPrefs.SetInt("CurrentLevel",SceneManager.GetActiveScene().buildIndex);
+
+
+        
+        TinySauce.OnGameStarted(SceneManager.GetActiveScene().buildIndex);
     }
     // Level complete function
 
     public void LevelComplete()
     {
+        PlayerPrefs.SetInt("CurrentLevel",SceneManager.GetActiveScene().buildIndex+1);
+        TinySauce.OnGameFinished(true,1, SceneManager.GetActiveScene().buildIndex);
         m_confetti.Play();
         Vibrations.Haptic(HapticTypes.Success);
         Invoke("WinGame",4f);
@@ -35,6 +41,7 @@ public class GameplayManager : MonoBehaviour
     // GameOver function
 
     public void GameOver(){
+        TinySauce.OnGameFinished(false,0, SceneManager.GetActiveScene().buildIndex);
         m_loseGameScreen.SetActive(true);
         Vibrations.Haptic(HapticTypes.Failure);
         Time.timeScale = 0;

@@ -20,7 +20,7 @@ public class WinScreenButtonsManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(2f);
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void NextLevelButton()

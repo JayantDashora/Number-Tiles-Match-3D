@@ -19,6 +19,6 @@ public class MainMenuButtonsManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
         Time.timeScale = 1;
         Debug.Log("HARIOM");
-        SceneManager.LoadScene(PlayerPrefs.GetInt("CurrentLevel",1));
+        SceneManager.LoadScene(PlayerPrefs.GetInt("CurrentLevel",2));
     }
 }

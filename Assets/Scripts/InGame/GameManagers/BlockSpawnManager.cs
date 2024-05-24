@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 
 
@@ -22,6 +23,7 @@ public class BlockSpawnManager : MonoBehaviour
     [SerializeField] private GameObject m_numberBlock;
     [SerializeField] private Section[] m_level;
     [SerializeField] private Grid m_mainStageGrid;
+    [SerializeField] private Grid m_mainStageGridExtra;
     [SerializeField] private LayerMask m_blockLayerMask; // Layer mask for blocks
     [SerializeField] private GameplayManager m_gameplayManager;
     private int m_currentSectionIndex = 0;
@@ -31,6 +33,7 @@ public class BlockSpawnManager : MonoBehaviour
     {
         NumberBlocksManipulator.s_OnBoardEmpty += SpawnSection;
         SpawnSection();
+        m_mainStageGridExtra = m_mainStageGrid;
     }
 
     // Spawn the specified section of the level
@@ -63,11 +66,11 @@ public class BlockSpawnManager : MonoBehaviour
                 {
                     
                     // Spawn the block on an empty spot
-
                     GameObject numberBlock = Instantiate(m_numberBlock, m_mainStageGrid.CellToWorld(spawnPoint), Quaternion.identity);
                     numberBlock.gameObject.transform.GetChild(0).GetComponent<CubeNumber>().number = currentSection[i];
                     numberBlock.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshPro>().text = currentSection[i].ToString();
                     spotFound = true;
+
                 }
             }
         }
@@ -78,7 +81,17 @@ public class BlockSpawnManager : MonoBehaviour
     // Check if a cell is occupied by any object on the specified layer
     private bool IsOccupied(Vector3Int _cellPosition)
     {
-        Vector3 worldPosition = m_mainStageGrid.CellToWorld(_cellPosition);
+
+        Vector3 worldPosition = Vector3.zero;
+        if(m_mainStageGrid != null){
+            worldPosition = m_mainStageGrid.CellToWorld(_cellPosition);
+        }
+        else{
+            Debug.Log("GRID");
+            m_mainStageGrid = m_mainStageGridExtra;
+            worldPosition = m_mainStageGrid.CellToWorld(_cellPosition); 
+        }
+        
 
         // Cast a ray downwards to check for any objects on the specified layer
         RaycastHit hit;
